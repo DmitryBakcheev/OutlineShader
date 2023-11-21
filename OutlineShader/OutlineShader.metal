@@ -13,15 +13,12 @@ using namespace metal;
 struct VertexIn {
     float3 position [[attribute(SCNVertexSemanticPosition)]];
     float3 normal   [[attribute(SCNVertexSemanticNormal)]];
-    float2 texcord [[attribute(SCNVertexSemanticTexcoord0)]];
-   
 };
 
 struct VertexOut {
     float4 position [[position]];
-    float4 color;
     float3 normal;
-    float2 texcord;
+    float4 color;
 };
 
 struct MyNodeBuffer {
@@ -36,9 +33,7 @@ vertex VertexOut outline_vertex(VertexIn in                      [[stage_in]],
 {
     float3 modelNormal = normalize(in.normal);
     float3 modelPosition = in.position;
-    float2 texture = in.texcord;
   
-    
     const float extrusionValue = 0.4;
 //  change this value to make outline smaller or bigger
     modelPosition += modelNormal * extrusionValue;
@@ -46,23 +41,14 @@ vertex VertexOut outline_vertex(VertexIn in                      [[stage_in]],
     
     VertexOut out;
     out.position = scn_node.modelViewProjectionTransform * float4(modelPosition, 1);
-    
-    out.color = float4(0, 0, 0, 1.0);
-//  here you can change color of outline effect (r, g, b, a)
-    
-    
     out.normal = (scn_node.normalTransform * float4(in.normal, 1)).xyz;
-    out.texcord = texture;
 
     return out;
 }
 
-fragment half4 outline_fragment(VertexOut in [[stage_in]],
-                                texture2d<float, access::sample> texture [[texture(SCNVertexSemanticTexcoord0)]]) {
-
-    constexpr sampler sampler2d(coord::normalized,filter::linear, address::repeat);
-    float2 uv = in.texcord;
-    float4 color = texture.sample(sampler2d, uv)*in.color;
-
-    return half4(color);
+fragment half4 outline_fragment(VertexOut in [[stage_in]]) {
+    
+//  here you can change color of outline effect (r, g, b, a)
+    return half4(0, 0, 0, 1);
 }
+

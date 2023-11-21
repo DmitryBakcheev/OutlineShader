@@ -105,7 +105,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let outlineProgram = SCNProgram()
         outlineProgram.vertexFunctionName = "outline_vertex"
         outlineProgram.fragmentFunctionName = "outline_fragment"
-        
+     
         outlineNode.geometry?.firstMaterial?.program = outlineProgram
         outlineNode.geometry?.firstMaterial?.cullMode = .front
         
